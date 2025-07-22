@@ -46,15 +46,15 @@
       <tr *ngFor="let item of invoiceData.items">
         <td style="padding: 8px; border: 1px solid #ccc;">{{ item.name }}</td>
         <td style="padding: 8px; border: 1px solid #ccc;">{{ item.qty }}</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">{{ item.price | currency }}</td>
-        <td style="padding: 8px; border: 1px solid #ccc;">{{ item.qty * item.price | currency }}</td>
+        <td style="padding: 8px; border: 1px solid #ccc;">{{ item.price | currency:'INR':'symbol' }}</td>
+        <td style="padding: 8px; border: 1px solid #ccc;">{{ item.qty * item.price | currency:'INR':'symbol' }}</td>
       </tr>
     </tbody>
   </table>
 
   <!-- Totals -->
   <div class="totals" style="text-align: right; margin-bottom: 20px;">
-    <p><strong>Total:</strong> {{ getTotal() | currency }}</p>
+    <p><strong>Total:</strong> {{ getTotal() | currency:'INR':'symbol' }}</p>
   </div>
 
   <!-- QR Code -->
@@ -62,20 +62,15 @@
     <h3>QR Code</h3>
     <img [src]="'data:image/png;base64,' + qrImage" alt="QR Code" style="width: 120px; height: 120px;" />
   </div>
-  
 
   <!-- Download Button -->
   <div style="text-align: center; margin-top: 30px;">
     <button
       (click)="downloadPDF()"
       [disabled]="!isDownloadEnabled()"
-      [ngClass]="{ 'disabled-button': !isDownloadEnabled(), 'enabled-button': isDownloadEnabled() }"
+      [ngStyle]="{ 'cursor': isDownloadEnabled() ? 'pointer' : 'not-allowed', 'background-color': isDownloadEnabled() ? '#007bff' : '#ccc', 'color': 'white', 'border': 'none' }"
       style="padding: 10px 20px; font-weight: bold; border-radius: 5px;">
       Download PDF
     </button>
-
-    
-
-    
   </div>
 </div>
