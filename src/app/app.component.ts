@@ -15,7 +15,7 @@ export class AppComponent {
   qrImage: string = ''; //  This stores QR from backend
 
   invoiceData = {
-    invoiceNumber: '',
+    invoiceNumber: 'INV-2025-001',
     date: new Date().toISOString(),
     clientName: '',
     streetAddress: '',

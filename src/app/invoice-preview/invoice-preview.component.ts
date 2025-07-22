@@ -2,7 +2,6 @@ import { Component, Input, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import html2pdf from 'html2pdf.js';
 
-
 @Component({
   selector: 'app-invoice-preview',
   standalone: true,
@@ -31,7 +30,7 @@ export class InvoicePreviewComponent {
     items: []
   };
 
-  @Input() qrImage: string = ''; // ✅ Added QR Image input
+  @Input() qrImage: string = '';
 
   @ViewChild('invoiceContent', { static: false }) invoiceContent!: ElementRef;
 
@@ -51,7 +50,25 @@ export class InvoicePreviewComponent {
     return this.getTotal() + this.getTax();
   }
 
+  /** ✅ Check if form is complete */
+  isDownloadEnabled(): boolean {
+    const data = this.invoiceData;
+    return !!(
+      data.invoiceNumber &&
+      data.date &&
+      data.clientName &&
+      data.streetAddress &&
+      data.cityStateCountry &&
+      data.zipCode &&
+      data.companyAddress &&
+      data.items.length > 0 &&
+      data.items.every(item => item.name && item.qty > 0 && item.price > 0)
+    );
+  }
+
+  /** ✅ Download PDF if valid */
   downloadPDF(): void {
+    if (!this.isDownloadEnabled()) return;
     const element = this.invoiceContent.nativeElement;
     const options = {
       margin: 0.5,
@@ -62,4 +79,19 @@ export class InvoicePreviewComponent {
     };
     html2pdf().set(options).from(element).save();
   }
+  isInvoiceValid(): boolean {
+  const data = this.invoiceData;
+  return !!(
+    data.invoiceNumber.trim() &&
+    data.date.trim() &&
+    data.clientName.trim() &&
+    data.streetAddress.trim() &&
+    data.cityStateCountry.trim() &&
+    data.zipCode.trim() &&
+    data.companyAddress.trim() &&
+    data.items.length > 0 &&
+    data.items.every(item => item.name && item.qty > 0 && item.price > 0)
+  );
+}
+
 }
